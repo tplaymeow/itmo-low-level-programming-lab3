@@ -16,7 +16,7 @@ target_link_libraries(
         ${CJSON_LIBRARY})
 
 # Setup sanitizers
-add_sanitizers(server_app)
+add_sanitizers(models)
 
 # Setup logging
 include(../cmake-additions/filename.cmake)

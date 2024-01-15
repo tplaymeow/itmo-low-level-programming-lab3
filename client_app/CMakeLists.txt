@@ -9,11 +9,13 @@ add_executable(client_app
 include_directories(
         "../logger"
         "../models"
-        "../parsing")
+        "../parsing"
+        "../connection")
 target_link_libraries(client_app
         logger
         models
-        parsing)
+        parsing
+        connection)
 
 # Setup sanitizers
 add_sanitizers(client_app)

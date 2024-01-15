@@ -4,6 +4,7 @@
 %{
 #include <stdio.h>
 #include <stdbool.h>
+#include "logger.h"
 #include "sql_parser.h"
 
 void yyerror_lexer(const char* s);
@@ -31,6 +32,7 @@ void yyerror_lexer(const char* s);
 "contains" {return CONTAINS;}
 "join" {return JOIN;}
 "on" {return ON;}
+"exit" {return EXIT;}
 "=" {return ASSIGN;}
 "(" {return LEFT_BRACKET;}
 ")" {return RIGHT_BRACKET;}
@@ -62,6 +64,5 @@ void yyerror_lexer(const char* s);
 %%
 
 void yyerror_lexer(const char* s) {
-	fprintf(stderr, "Lexer error. Token: %s\n", s);
-	exit(1);
+	debug("Lexer error: %s", s);
 }

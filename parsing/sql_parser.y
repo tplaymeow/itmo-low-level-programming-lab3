@@ -3,10 +3,12 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #include "models.h"
+#include "logger.h"
+#include "../parsing.h"
 
 extern int yylex();
 
-void yyerror(struct sql_statement *result, const char* s);
+void yyerror(struct parsing_result_value *result, const char* s);
 %}
 
 %code requires {
@@ -51,7 +53,7 @@ void yyerror(struct sql_statement *result, const char* s);
 %token<text_val> TEXT_VAL
 %token<identifier_val> IDENTIFIER
 %token<comparison_operator_val> COMPARISON_OPERATOR
-%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN CONTAINS JOIN ON COMPARISON_OPERATOR_EQUAL
+%token CREATE DROP SELECT INSERT DELETE UPDATE TABLE FROM WHERE INTO INTEGER_TYPE FLOATING_TYPE BOOLEAN_TYPE TEXT_TYPE LEFT_BRACKET RIGHT_BRACKET SEMICOLON COMMA AND OR SET ASSIGN CONTAINS JOIN ON COMPARISON_OPERATOR_EQUAL EXIT
 
 %type<statement_val> statement
 %type<create_statement_val> create_statement
@@ -77,12 +79,22 @@ void yyerror(struct sql_statement *result, const char* s);
 
 %start input
 
-%parse-param { struct sql_statement *result }
+%parse-param { struct parsing_result_value *result }
 
 %%
 
 input
-    : statement SEMICOLON {*result = $1;}
+    : statement SEMICOLON {
+        *result = (struct parsing_result_value) {
+            .type = PARSING_TYPE_STATEMENT,
+            .value.statement = $1
+        };
+    }
+    | EXIT SEMICOLON {
+        *result = (struct parsing_result_value) {
+            .type = PARSING_TYPE_EXIT,
+        };
+    }
     ;
 
 statement
@@ -389,7 +401,6 @@ data_type
     ;
 %%
 
-void yyerror(struct sql_statement *result, const char* s) {
-	fprintf(stderr, "Parser error: %s\n", s);
-	exit(1);
+void yyerror(struct parsing_result_value *result, const char* s) {
+	debug("Parser error: %s", s);
 }

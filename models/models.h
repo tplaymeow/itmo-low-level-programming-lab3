@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 enum sql_data_type {
   SQL_DATA_TYPE_INTEGER,
@@ -28,7 +29,7 @@ sql_column_with_type_list_create(struct sql_column_with_type item,
 void sql_column_with_type_list_free(struct sql_column_with_type_list *list);
 
 union sql_literal_value {
-  int32_t integer;
+  int64_t integer;
   double floating_point;
   bool boolean;
   char *text;
@@ -48,6 +49,17 @@ struct sql_literal_list *sql_literal_list_create(struct sql_literal item,
                                                  struct sql_literal_list *next);
 
 void sql_literal_list_free(struct sql_literal_list *list);
+
+struct sql_literal_list_list {
+  struct sql_literal_list *item;
+  struct sql_literal_list_list *next;
+};
+
+struct sql_literal_list_list *
+sql_literal_list_list_create(struct sql_literal_list *item,
+                             struct sql_literal_list_list *next);
+
+void sql_literal_list_list_free(struct sql_literal_list_list *list);
 
 enum sql_operand_type { SQL_OPERAND_TYPE_COLUMN, SQL_OPERAND_TYPE_LITERAL };
 
@@ -200,6 +212,26 @@ union sql_statement_value {
 struct sql_statement {
   enum sql_statement_type type;
   union sql_statement_value value;
+};
+
+struct sql_common_response {
+  char *message;
+};
+
+struct sql_select_response_header {
+  size_t columns_count;
+  char **columns;
+};
+
+struct sql_select_response_header
+sql_select_response_header_create(size_t columns_count);
+
+void sql_select_response_header_destroy(
+    struct sql_select_response_header header);
+
+struct sql_select_response {
+  struct sql_select_response_header header;
+  struct sql_literal_list_list *rows;
 };
 
 #endif // ITMO_LOW_LEVEL_PROGRAMMING_LAB3_MODELS_H

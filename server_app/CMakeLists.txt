@@ -4,12 +4,21 @@ project(server_app C)
 set(CMAKE_C_STANDARD 17)
 
 add_executable(server_app
-        main.c)
+        main.c
+        handlers.h handlers.c)
 
 include_directories(
-        "../logger")
+        "../logger"
+        "../connection"
+        "../models"
+        "../paging"
+        "../database")
 target_link_libraries(server_app
-        logger)
+        logger
+        connection
+        models
+        paging
+        database)
 
 # Setup sanitizers
 add_sanitizers(server_app)

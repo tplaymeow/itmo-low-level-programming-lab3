@@ -8,8 +8,12 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/externals/sanitizers-cmake/cmake" ${C
 find_package(Sanitizers REQUIRED)
 
 add_subdirectory(logger)
+add_subdirectory(utils)
+add_subdirectory(paging)
+add_subdirectory(database)
 add_subdirectory(models)
 add_subdirectory(parsing)
+add_subdirectory(connection)
 add_subdirectory(server_app)
 add_subdirectory(client_app)
 

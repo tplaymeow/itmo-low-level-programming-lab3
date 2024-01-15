@@ -27,5 +27,11 @@ void logger_log(enum logger_level level, const char *target, const char *file,
     print_log("WARNING", target, file, line, format, arguments);
     va_end(arguments);
   } break;
+  case LOGGER_INFO: {
+    va_list arguments;
+    va_start(arguments, format);
+    print_log("INFO", target, file, line, format, arguments);
+    va_end(arguments);
+  } break;
   }
 }

@@ -7,7 +7,10 @@
 #define warn(...)                                                              \
   logger_log(LOGGER_WARN, TARGETNAME, FILENAME, __LINE__, __VA_ARGS__)
 
-enum logger_level { LOGGER_DEBUG = 0, LOGGER_WARN };
+#define info(...)                                                              \
+  logger_log(LOGGER_INFO, TARGETNAME, FILENAME, __LINE__, __VA_ARGS__)
+
+enum logger_level { LOGGER_DEBUG = 0, LOGGER_WARN, LOGGER_INFO };
 
 void logger_log(enum logger_level level, const char *target, const char *file,
                 int line, const char *format, ...);

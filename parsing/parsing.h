@@ -5,7 +5,12 @@
 
 struct parsing_result {
   enum { PARSING_STATUS_OK, PARSING_STATUS_ERROR } status;
-  struct sql_statement value;
+  struct parsing_result_value {
+    enum { PARSING_TYPE_STATEMENT, PARSING_TYPE_EXIT } type;
+    union {
+      struct sql_statement statement;
+    } value;
+  } value;
 };
 
 struct parsing_result parse(const char *input);
