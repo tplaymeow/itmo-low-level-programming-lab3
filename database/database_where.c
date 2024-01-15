@@ -134,7 +134,7 @@ database_where_is_satisfied_contains(struct database_table table,
         DATABASE_ATTRIBUTE_STRING) {
       return false;
     }
-    right_value =
+    left_value =
         database_attribute_values_get(row.values, left_position).string;
     switch (contains.right.type) {
     case DATABASE_WHERE_CONTAINS_ITEM_CONSTANT: {
@@ -166,11 +166,11 @@ static bool database_where_is_satisfied_comparison(
   union database_attribute_value right_value;
   switch (comparison.left.type) {
   case DATABASE_WHERE_COMPARISON_ITEM_CONSTANT: {
-    type = comparison.left.value.constant.type;
+    type = comparison.left.data_type;
     left_value = comparison.left.value.constant.value;
     switch (comparison.right.type) {
     case DATABASE_WHERE_COMPARISON_ITEM_CONSTANT: {
-      if (type != comparison.right.value.constant.type) {
+      if (type != comparison.right.data_type) {
         return false;
       }
       right_value = comparison.right.value.constant.value;
@@ -194,7 +194,7 @@ static bool database_where_is_satisfied_comparison(
     left_value = database_attribute_values_get(row.values, left_position);
     switch (comparison.right.type) {
     case DATABASE_WHERE_COMPARISON_ITEM_CONSTANT: {
-      if (type != comparison.right.value.constant.type) {
+      if (type != comparison.right.data_type) {
         return false;
       }
       right_value = comparison.right.value.constant.value;
@@ -401,7 +401,7 @@ bool database_where_is_satisfied(struct database_table table,
     }
 
   case DATABASE_WHERE_TYPE_COMPARISON:
-    return database_where_is_satisfied_comparison(table, row,
+     return database_where_is_satisfied_comparison(table, row,
                                                   where.value.comparison);
 
   case DATABASE_WHERE_TYPE_CONTAINS:

@@ -516,7 +516,7 @@ static cJSON *serialize_filter(struct sql_filter filter) {
     cJSON *logic = cJSON_AddObjectToObject(result, "logic");
     const char *operator= logic_operator_to_string[filter.value.logic.operator];
     cJSON *left = serialize_filter(*filter.value.logic.left);
-    cJSON *right = serialize_filter(*filter.value.logic.left);
+    cJSON *right = serialize_filter(*filter.value.logic.right);
     if (logic == NULL || left == NULL || right == NULL ||
         cJSON_AddStringToObject(logic, "operator", operator) == NULL ||
         !cJSON_AddItemToObject(logic, "left", left) ||
@@ -568,7 +568,9 @@ static bool deserialize_filter(struct sql_filter *filter, const cJSON *json) {
     logic_operator_from_string(&filter->value.logic.operator,
                                operatorJSON->valuestring);
     filter->value.logic.left = malloc(sizeof(struct sql_filter));
+    *filter->value.logic.left = left;
     filter->value.logic.right = malloc(sizeof(struct sql_filter));
+    *filter->value.logic.right = right;
     if (filter->value.logic.left == NULL || filter->value.logic.right == NULL) {
       free(filter->value.logic.left);
       free(filter->value.logic.right);

@@ -78,7 +78,6 @@ enum database_where_comparison_item_type {
 
 union database_where_comparison_item_value {
   struct {
-    enum database_attribute_type type;
     union database_attribute_value value;
   } constant;
   struct {

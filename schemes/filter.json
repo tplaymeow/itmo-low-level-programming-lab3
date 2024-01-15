@@ -1,0 +1,120 @@
+{
+  "$schema": "https://github.com/tplaymeow/itmo-low-level-programming-lab3/schemes/filter",
+  "type": "object",
+  "properties": {
+    "comparison": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "type": "string"
+        },
+        "left": {
+          "type": "object",
+          "properties": {
+            "column": {
+              "type": "string"
+            },
+            "literal": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type":["number","string","boolean"]
+                }
+              }
+            }
+          },
+          "required": []
+        },
+        "right": {
+          "type": "object",
+          "properties": {
+            "column": {
+              "type": "string"
+            },
+            "literal": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type":["number","string","boolean"]
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      },
+      "required": ["operator", "left", "right"]
+    },
+    "contains": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "type": "string"
+        },
+        "left": {
+          "type": "object",
+          "properties": {
+            "column": {
+              "type": "string"
+            },
+            "literal": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type":["string"]
+                }
+              }
+            }
+          },
+          "required": []
+        },
+        "right": {
+          "type": "object",
+          "properties": {
+            "column": {
+              "type": "string"
+            },
+            "literal": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type":["string"]
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      },
+      "required": ["operator", "left", "right"]
+    },
+    "logic": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "type": "string"
+        },
+        "left": {
+          "$ref": "https://github.com/tplaymeow/itmo-low-level-programming-lab3/schemes/filter"
+        },
+        "right": {
+          "$ref": "https://github.com/tplaymeow/itmo-low-level-programming-lab3/schemes/filter"
+        }
+      },
+      "required": ["operator", "left", "right"]
+    }
+  },
+  "required": []
+}

@@ -202,7 +202,7 @@ database_where_contains_item_make(struct database_where_contains_item *item_ret,
         (struct sql_common_response){"Column not found"});
   }
   case SQL_OPERAND_TYPE_LITERAL: {
-    item_ret->type = DATABASE_WHERE_CONTAINS_ITEM_ATTRIBUTE;
+    item_ret->type = DATABASE_WHERE_CONTAINS_ITEM_CONSTANT;
     item_ret->value.constant.value = operand.value.literal;
     return NULL;
   }
@@ -732,30 +732,33 @@ char *handle_update_request(struct database *database,
     return where_res;
   }
 
-  struct database_select_row_result select_result;
-  do {
-    select_result =
-        database_select_row_first(database, get_table_result.table, where);
-    const struct database_attribute_values values = apply_sets(
-        get_table_result.table, select_result.row.values, statement.set);
-    const struct database_remove_row_result remove_result =
-        database_remove_row(database, select_result.row);
-    if (!remove_result.success) {
-      database_table_destroy(get_table_result.table);
-      return serialize_common_response((struct sql_common_response){"Failed"});
-    }
+  struct database_select_row_result select_result =
+          database_select_row_first(database, get_table_result.table, where);
+  while (select_result.success) {
+      const struct database_attribute_values values = apply_sets(
+              get_table_result.table, select_result.row.values, statement.set);
+      const struct database_remove_row_result remove_result =
+              database_remove_row(database, select_result.row);
+      if (!remove_result.success) {
+          database_table_destroy(get_table_result.table);
+          return serialize_common_response((struct sql_common_response){"Failed"});
+      }
 
-    struct database_insert_row_request insert =
-        database_insert_row_request_create(get_table_result.table);
-    insert.values = values;
+      struct database_insert_row_request insert =
+              database_insert_row_request_create(get_table_result.table);
+      insert.values = values;
 
-    struct database_insert_row_result insert_result =
-        database_insert_row(database, get_table_result.table, insert);
-    if (!insert_result.success) {
-      database_table_destroy(get_table_result.table);
-      return serialize_common_response((struct sql_common_response){"Failed"});
-    }
-  } while (select_result.success);
+      struct database_insert_row_result insert_result =
+              database_insert_row(database, get_table_result.table, insert);
+      if (!insert_result.success) {
+          database_table_destroy(get_table_result.table);
+          return serialize_common_response((struct sql_common_response){"Failed"});
+      }
+
+      select_result =
+              database_select_row_first(database, get_table_result.table, where);
+
+  }
 
   return serialize_common_response((struct sql_common_response){"Success"});
 }
