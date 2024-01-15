@@ -733,31 +733,30 @@ char *handle_update_request(struct database *database,
   }
 
   struct database_select_row_result select_result =
-          database_select_row_first(database, get_table_result.table, where);
+      database_select_row_first(database, get_table_result.table, where);
   while (select_result.success) {
-      const struct database_attribute_values values = apply_sets(
-              get_table_result.table, select_result.row.values, statement.set);
-      const struct database_remove_row_result remove_result =
-              database_remove_row(database, select_result.row);
-      if (!remove_result.success) {
-          database_table_destroy(get_table_result.table);
-          return serialize_common_response((struct sql_common_response){"Failed"});
-      }
+    const struct database_attribute_values values = apply_sets(
+        get_table_result.table, select_result.row.values, statement.set);
+    const struct database_remove_row_result remove_result =
+        database_remove_row(database, select_result.row);
+    if (!remove_result.success) {
+      database_table_destroy(get_table_result.table);
+      return serialize_common_response((struct sql_common_response){"Failed"});
+    }
 
-      struct database_insert_row_request insert =
-              database_insert_row_request_create(get_table_result.table);
-      insert.values = values;
+    struct database_insert_row_request insert =
+        database_insert_row_request_create(get_table_result.table);
+    insert.values = values;
 
-      struct database_insert_row_result insert_result =
-              database_insert_row(database, get_table_result.table, insert);
-      if (!insert_result.success) {
-          database_table_destroy(get_table_result.table);
-          return serialize_common_response((struct sql_common_response){"Failed"});
-      }
+    struct database_insert_row_result insert_result =
+        database_insert_row(database, get_table_result.table, insert);
+    if (!insert_result.success) {
+      database_table_destroy(get_table_result.table);
+      return serialize_common_response((struct sql_common_response){"Failed"});
+    }
 
-      select_result =
-              database_select_row_first(database, get_table_result.table, where);
-
+    select_result =
+        database_select_row_first(database, get_table_result.table, where);
   }
 
   return serialize_common_response((struct sql_common_response){"Success"});

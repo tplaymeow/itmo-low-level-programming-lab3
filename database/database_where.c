@@ -401,7 +401,7 @@ bool database_where_is_satisfied(struct database_table table,
     }
 
   case DATABASE_WHERE_TYPE_COMPARISON:
-     return database_where_is_satisfied_comparison(table, row,
+    return database_where_is_satisfied_comparison(table, row,
                                                   where.value.comparison);
 
   case DATABASE_WHERE_TYPE_CONTAINS:

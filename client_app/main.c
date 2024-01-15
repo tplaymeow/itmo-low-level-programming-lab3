@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
     const struct models_deserialization_select_response_result select =
         deserialize_select_response(response);
     if (common.type == MODELS_DESERIALIZATION_RESULT_OK) {
-      printf("%s\n", common.value.message);
+      // printf("%s\n", common.value.message);
     } else if (select.type == MODELS_DESERIALIZATION_RESULT_OK) {
       for (size_t i = 0; i < select.value.header.columns_count; i++) {
         printf("%-15s", select.value.header.columns[i]);

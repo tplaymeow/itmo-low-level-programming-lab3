@@ -33,7 +33,14 @@ int main(int argc, char **argv) {
   const char *filename = argv[1];
   const bool is_file_exists = access(filename, F_OK) == 0;
 
-  FILE *file = is_file_exists ? fopen(filename, "rb+") : fopen(filename, "ab+");
+  FILE *file;
+  if (is_file_exists) {
+    file = fopen(filename, "rb+");
+  } else {
+    fclose(fopen(filename, "ab+"));
+    file = fopen(filename, "rb+");
+  }
+
   if (file == NULL) {
     warn("File open failed. Errno: %d", errno);
     return EXIT_FAILURE;

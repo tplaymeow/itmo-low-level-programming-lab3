@@ -27,3 +27,5 @@ select from BTable;
 delete from ATable where a_text contains "T" and a_float >= 6.0;
 select from BTable where b_text contains "T" and a_float >= 6.0;
 select from ATable;
+
+select from ATable join BTable on a_text == b_text;
