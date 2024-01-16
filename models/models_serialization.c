@@ -1114,6 +1114,7 @@ deserialize_common_response(const char *string) {
   cJSON_Delete(json);
   return (struct models_deserialization_common_response_result){
       .type = MODELS_DESERIALIZATION_RESULT_OK,
+//      .value.message = strdup(messageJSON->valuestring)};
       .value.message = messageJSON->valuestring};
 }
 

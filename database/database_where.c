@@ -63,7 +63,7 @@ static bool database_where_joined_is_satisfied_contains(
       return false;
     }
 
-    right_value =
+    left_value =
         database_attribute_values_get(l_item_row.values, left_position).string;
 
     switch (contains.right.type) {

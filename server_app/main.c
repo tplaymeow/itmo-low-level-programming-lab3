@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  printf("Server started at port %d\n", port);
+
   while (1) {
     char *request = server_accept(server);
     if (request == NULL) {

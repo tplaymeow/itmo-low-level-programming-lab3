@@ -248,7 +248,7 @@ char *database_where_joined_contains_item_make(
         (struct sql_common_response){"Column not found"});
   }
   case SQL_OPERAND_TYPE_LITERAL: {
-    item_ret->type = DATABASE_WHERE_CONTAINS_ITEM_ATTRIBUTE;
+    item_ret->type = DATABASE_WHERE_CONTAINS_ITEM_CONSTANT;
     item_ret->value.constant.value = operand.value.literal;
     return NULL;
   }

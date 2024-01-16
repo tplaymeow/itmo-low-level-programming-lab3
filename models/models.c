@@ -47,7 +47,7 @@ struct sql_literal_list_list *
 sql_literal_list_list_create(struct sql_literal_list *item,
                              struct sql_literal_list_list *next) {
   struct sql_literal_list_list *result =
-      malloc(sizeof(struct sql_literal_list *));
+      malloc(sizeof(struct sql_literal_list_list));
   if (result == NULL)
     return NULL;
 
